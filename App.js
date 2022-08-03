@@ -71,7 +71,18 @@ export default function App() {
     return;
   };
 
-  const checkTodo = async (key) => {};
+  const checkTodo = async (key) => {
+    const newToDos = { ...toDos };
+    {
+      newToDos[key].check ? (
+        newToDos[key].check = false
+      ) : (
+        newToDos[key].check = true
+      )
+    }
+    setToDos(newToDos);
+    await saveToDos(newToDos);
+  };
 
   useEffect(() => {
     loadToDos();
@@ -103,16 +114,12 @@ export default function App() {
         style={styles.input}
       />
       <ScrollView>
-        {Object.keys(toDos).map((key) =>
+        {Object.keys(toDos).map((key) => (
           <View style={styles.toDo} key={key}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <TouchableOpacity onPress={() => checkTodo(key)}>
-                {check ? (
-                  <MaterialIcons
-                    name="check-circle"
-                    size={30}
-                    color="black"
-                  />
+                { toDos[key].check === true ? (
+                  <MaterialIcons name="check-circle" size={30} color="black" />
                 ) : (
                   <MaterialIcons
                     name="radio-button-unchecked"
@@ -127,7 +134,7 @@ export default function App() {
               <Fontisto name="trash" size={20} color={theme.trash} />
             </TouchableOpacity>
           </View>
-        )}
+        ))}
       </ScrollView>
     </View>
   );
