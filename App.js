@@ -17,7 +17,6 @@ import { theme } from "./colors";
 const STORAGE_KEY = "@toDos";
 
 export default function App() {
-  const [working, setWorking] = useState(true);
   const [text, setText] = useState("");
   const [toDos, setToDos] = useState({});
   const [check, setCheck] = useState(false);
@@ -48,7 +47,7 @@ export default function App() {
     }
     // save to do
     const newToDos = Object.assign({}, toDos, {
-      [Date.now()]: { text, working, check },
+      [Date.now()]: { text, check },
     });
     setToDos(newToDos);
     await saveToDos(newToDos);
@@ -105,31 +104,29 @@ export default function App() {
       />
       <ScrollView>
         {Object.keys(toDos).map((key) =>
-          toDos[key].working === working ? (
-            <View style={styles.toDo} key={key}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <TouchableOpacity onPress={() => checkTodo(key)}>
-                  {check ? (
-                    <MaterialIcons
-                      name="check-circle"
-                      size={30}
-                      color="black"
-                    />
-                  ) : (
-                    <MaterialIcons
-                      name="radio-button-unchecked"
-                      size={30}
-                      color="black"
-                    />
-                  )}
-                </TouchableOpacity>
-                <Text style={styles.toDoText}>{toDos[key].text}</Text>
-              </View>
-              <TouchableOpacity onPress={() => deleteToDo(key)}>
-                <Fontisto name="trash" size={20} color={theme.trash} />
+          <View style={styles.toDo} key={key}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity onPress={() => checkTodo(key)}>
+                {check ? (
+                  <MaterialIcons
+                    name="check-circle"
+                    size={30}
+                    color="black"
+                  />
+                ) : (
+                  <MaterialIcons
+                    name="radio-button-unchecked"
+                    size={30}
+                    color="black"
+                  />
+                )}
               </TouchableOpacity>
+              <Text style={styles.toDoText}>{toDos[key].text}</Text>
             </View>
-          ) : null
+            <TouchableOpacity onPress={() => deleteToDo(key)}>
+              <Fontisto name="trash" size={20} color={theme.trash} />
+            </TouchableOpacity>
+          </View>
         )}
       </ScrollView>
     </View>
