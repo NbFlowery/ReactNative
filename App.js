@@ -74,11 +74,9 @@ export default function App() {
   const checkTodo = async (key) => {
     const newToDos = { ...toDos };
     {
-      newToDos[key].check ? (
-        newToDos[key].check = false
-      ) : (
-        newToDos[key].check = true
-      )
+      newToDos[key].check
+        ? (newToDos[key].check = false)
+        : (newToDos[key].check = true);
     }
     setToDos(newToDos);
     await saveToDos(newToDos);
@@ -117,18 +115,30 @@ export default function App() {
         {Object.keys(toDos).map((key) => (
           <View style={styles.toDo} key={key}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <TouchableOpacity onPress={() => checkTodo(key)}>
-                { toDos[key].check === true ? (
-                  <MaterialIcons name="check-circle" size={30} color="black" />
-                ) : (
-                  <MaterialIcons
-                    name="radio-button-unchecked"
-                    size={30}
-                    color="black"
-                  />
-                )}
-              </TouchableOpacity>
-              <Text style={styles.toDoText}>{toDos[key].text}</Text>
+              {toDos[key].check === true ? (
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <TouchableOpacity onPress={() => checkTodo(key)}>
+                    <MaterialIcons
+                      name="check-circle"
+                      size={30}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles.checkToDoText}>{toDos[key].text}</Text>
+                </View>
+              ) : (
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <TouchableOpacity onPress={() => checkTodo(key)}>
+                    <MaterialIcons
+                      name="radio-button-unchecked"
+                      size={30}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+
+                  <Text style={styles.toDoText}>{toDos[key].text}</Text>
+                </View>
+              )}
             </View>
             <TouchableOpacity onPress={() => deleteToDo(key)}>
               <Fontisto name="trash" size={20} color={theme.trash} />
@@ -191,5 +201,13 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 38,
     fontWeight: "700",
+  },
+
+  checkToDoText: {
+    color: theme.lightGray,
+    textDecorationLine: "line-through",
+    fontSize: 18,
+    fontWeight: "500",
+    marginLeft: 10,
   },
 });
