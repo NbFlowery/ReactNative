@@ -10,6 +10,7 @@ import {
   Alert,
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
+import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { theme } from "./colors";
@@ -71,6 +72,30 @@ export default function App() {
     return;
   };
 
+  const modifyTodo = async (key) => {
+    Alert.prompt(
+      "수정",
+      "내용을 입력하세요.",
+      [
+        { text: "취소" },
+        {
+          text: "수정",
+          style: "destructive",
+          onPress: async (text) => {
+            const newToDos = { ...toDos };
+            newToDos[key].text = text;
+            setToDos(newToDos);
+            await saveToDos(newToDos);
+          },
+        },
+      ],
+      "plain-text",
+      toDos[key].text
+    );
+
+    return;
+  };
+  
   const checkTodo = async (key) => {
     const newToDos = { ...toDos };
     {
@@ -140,9 +165,14 @@ export default function App() {
                 </View>
               )}
             </View>
-            <TouchableOpacity onPress={() => deleteToDo(key)}>
-              <Fontisto name="trash" size={20} color={theme.trash} />
-            </TouchableOpacity>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity onPress={() => modifyTodo(key)}>
+                <FontAwesome name="pencil" size={20} style={{ marginRight: 10, color: theme.trash }} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => deleteToDo(key)}>
+                <Fontisto name="trash" size={20} color={theme.trash} />
+              </TouchableOpacity>
+            </View>
           </View>
         ))}
       </ScrollView>
