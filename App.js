@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import Main from "/ReactNative/components/mainScreen/Main.js";
-import Splash from "/ReactNative/components/splashScreen/SplashScreen.js";
+import Main from "./components/mainScreen/Main";
+import Splash from "./components/splashScreen/SplashScreen";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
