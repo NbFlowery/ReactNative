@@ -21,6 +21,8 @@ export const Main = () => {
   const [text, setText] = useState("");
   const [toDos, setToDos] = useState({});
   const [check, setCheck] = useState(false);
+  const [checks, setChecks] = useState(0);
+  const [percent, setPercent] = useState(0);
 
   const onChangeText = (payload) => setText(payload);
   const saveToDos = async (toSave) => {
@@ -107,9 +109,25 @@ export const Main = () => {
     await saveToDos(newToDos);
   };
 
+  const calculate = () => {
+    setChecks(0);
+    setPercent(0);
+    Object.keys(toDos).map((key) =>
+      toDos[key].check ? setChecks(checks + 1) : setChecks(checks)
+    );
+    checks === 0
+      ? setPercent(0)
+      : setPercent(Math.floor((checks / Object.keys(toDos).length) * 100));
+  };
+
   useEffect(() => {
     loadToDos();
+    calculate();
   }, []);
+
+  useEffect(() => {
+    calculate();
+  }, [toDos]);
 
   return (
     <View style={styles.container}>
@@ -121,7 +139,7 @@ export const Main = () => {
         <Text style={{ ...styles.btnText, color: "black" }}>TODO</Text>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text style={{ fontSize: 16, fontWeight: "600", color: "green" }}>
-            100%
+            {percent}%
           </Text>
           <Text style={{ fontSize: 16, fontWeight: "500", marginLeft: 5 }}>
             완료
