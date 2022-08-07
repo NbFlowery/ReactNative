@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../styles/colors.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,6 +21,8 @@ export const Main = () => {
   const [text, setText] = useState("");
   const [toDos, setToDos] = useState({});
   const [check, setCheck] = useState(false);
+  const [checks, setChecks] = useState(0);
+  const [percent, setPercent] = useState(0);
 
   const onChangeText = (payload) => setText(payload);
   const saveToDos = async (toSave) => {
@@ -95,7 +97,7 @@ export const Main = () => {
 
     return;
   };
-  
+
   const checkTodo = async (key) => {
     const newToDos = { ...toDos };
     {
@@ -107,9 +109,24 @@ export const Main = () => {
     await saveToDos(newToDos);
   };
 
+  const calculate = async () => {
+    setPercent(0);
+    let checkSum = 0;
+    Object.keys(toDos).map((key) => (checkSum += toDos[key].check ? 1 : 0));
+    setChecks(checkSum);
+    checkSum === 0
+      ? setPercent(0)
+      : setPercent(Math.floor((checkSum / Object.keys(toDos).length) * 100));
+  };
+
   useEffect(() => {
     loadToDos();
+    calculate();
   }, []);
+
+  useEffect(() => {
+    calculate();
+  }, [toDos]);
 
   return (
     <View style={styles.container}>
@@ -121,7 +138,7 @@ export const Main = () => {
         <Text style={{ ...styles.btnText, color: "black" }}>TODO</Text>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text style={{ fontSize: 16, fontWeight: "600", color: "green" }}>
-            100%
+            {percent}%
           </Text>
           <Text style={{ fontSize: 16, fontWeight: "500", marginLeft: 5 }}>
             완료
@@ -160,14 +177,17 @@ export const Main = () => {
                       color="black"
                     />
                   </TouchableOpacity>
-
                   <Text style={styles.toDoText}>{toDos[key].text}</Text>
                 </View>
               )}
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <TouchableOpacity onPress={() => modifyTodo(key)}>
-                <FontAwesome name="pencil" size={20} style={{ marginRight: 10, color: theme.trash }} />
+                <FontAwesome
+                  name="pencil"
+                  size={20}
+                  style={{ marginRight: 10, color: theme.trash }}
+                />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => deleteToDo(key)}>
                 <Fontisto name="trash" size={20} color={theme.trash} />
@@ -178,7 +198,7 @@ export const Main = () => {
       </ScrollView>
     </View>
   );
-}
+};
 
 export default Main;
 
