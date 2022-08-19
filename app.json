@@ -27,6 +27,17 @@
       }
     },
     "web": {
+      "config": {
+        "firebase": {
+          "apiKey": "AIzaSyB_i1MFwjdCUpxxJio_SuHpG6FhpsjxB50",
+          "authDomain": "flowery-57250.firebaseapp.com",
+          "projectId": "flowery-57250",
+          "storageBucket": "flowery-57250.appspot.com",
+          "messagingSenderId": "919269155172",
+          "appId": "1:919269155172:web:72eea984743ba390111a71",
+          "measurementId": "G-9HR0W2BV33"
+        }
+      },
       "favicon": "./assets/favicon.png"
     }
   }
