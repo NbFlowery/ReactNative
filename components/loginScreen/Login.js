@@ -9,9 +9,10 @@ import {
   signInWithCredential,
   signOut,
 } from "firebase/auth";
-import { Button, View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import Constants from "expo-constants";
 import Logo from "./Logo";
+import Main from "../mainScreen/Main";
 
 initializeApp(Constants.manifest.web.config.firebase);
 
@@ -62,15 +63,7 @@ const Login = () => {
   return (
     <View style={styles.container}>
       {login ? (
-        <View>
-          <Button title="Logout" onPress={googleLogout} />
-          <Text>로그인 되었습니다.</Text>
-          <Text>안녕하세요, {userName}님!</Text>
-          <Image
-            style={{ width: 100, height: 100, borderRadius: 50 }}
-            source={{ uri: userImage }}
-          />
-        </View>
+        <Main />
       ) : (
         <View>
           <Logo />
