@@ -7,7 +7,6 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithCredential,
-  signOut,
 } from "firebase/auth";
 import { View, Text, StyleSheet } from "react-native";
 import Constants from "expo-constants";
@@ -25,8 +24,6 @@ const Login = () => {
     responseType: "id_token",
   });
   const [login, setLogin] = useState(false);
-  const [userName, setUserName] = useState();
-  const [userImage, setUserImage] = useState();
 
   const googleLogin = async (props) => {
     try {
@@ -35,29 +32,14 @@ const Login = () => {
       const creds = GoogleAuthProvider.credential(result.params.id_token);
       const res = await signInWithCredential(auth, creds);
       const userName = res.user.displayName;
-      const userImage = res.user.photoURL;
       setLogin(true);
-      setUserName(userName);
-      setUserImage(userImage);
       console.log("Sign-in successful.");
-      console.log("userName: ", userName, "userImage: ", userImage);
+      console.log("userName:", userName);
     } catch {
       (e) => {
         console.log(e);
       };
     }
-  };
-
-  const googleLogout = async () => {
-    const auth = getAuth();
-    signOut(auth)
-      .then(() => {
-        console.log("Sign-out successful.");
-        setLogin(false);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
   };
 
   return (
