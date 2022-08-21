@@ -12,6 +12,7 @@ import { View, Text, StyleSheet } from "react-native";
 import Constants from "expo-constants";
 import Logo from "./Logo";
 import Main from "../mainScreen/Main";
+import { CLIENT_ID } from "@env";
 
 initializeApp(Constants.manifest.web.config.firebase);
 
@@ -19,8 +20,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 const Login = () => {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId:
-      "919269155172-1a72ab8rlqe5c3ii6advct29ob3fee9p.apps.googleusercontent.com",
+    clientId: CLIENT_ID,
     responseType: "id_token",
   });
   const [login, setLogin] = useState(false);
@@ -37,6 +37,7 @@ const Login = () => {
       console.log("userName:", userName);
     } catch {
       (e) => {
+        console.log("login failed.")
         console.log(e);
       };
     }
@@ -50,7 +51,9 @@ const Login = () => {
         <View>
           <Logo />
           <View style={styles.googleLoginView}>
-            <Text style={styles.googleLoginText} onPress={googleLogin}>구글로 계속하기</Text>
+            <Text style={styles.googleLoginText} onPress={googleLogin}>
+              구글로 계속하기
+            </Text>
           </View>
         </View>
       )}
