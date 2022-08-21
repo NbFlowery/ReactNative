@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-
-import Main from "./components/mainScreen/Main";
+import Login from "./components/loginScreen/Login";
 import Splash from "./components/splashScreen/SplashScreen";
 
 export default function App() {
@@ -12,5 +11,6 @@ export default function App() {
     }, 3000);
   }, []);
 
-  return <>{isLoading ? <Splash /> : <Main />}</>;
+  return <>{isLoading ? <Splash /> : <Login />}</>;
+
 }

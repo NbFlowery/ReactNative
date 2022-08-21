@@ -8,6 +8,7 @@ import {
   TextInput,
   ScrollView,
   Alert,
+  Image,
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -15,6 +16,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../styles/colors.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Calendar from "./Calendar.js";
+import { getAuth } from "firebase/auth";
 
 const STORAGE_KEY = "@toDos";
 
@@ -24,6 +26,8 @@ export const Main = () => {
   const [check, setCheck] = useState(false);
   const [checks, setChecks] = useState(0);
   const [percent, setPercent] = useState(0);
+  const auth = getAuth();
+  const userProfileImg = auth.currentUser.photoURL;
 
   const onChangeText = (payload) => setText(payload);
   const saveToDos = async (toSave) => {
@@ -130,9 +134,12 @@ export const Main = () => {
   }, [toDos]);
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
+    <ScrollView indicatorStyle="white">
+      <View style={styles.container}>
         <StatusBar style="auto" />
+        <TouchableOpacity>
+          <Image style={styles.profileImg} source={{ uri: userProfileImg }} />
+        </TouchableOpacity>
         <View style={styles.calendar}>
           <Calendar />
         </View>
@@ -155,51 +162,49 @@ export const Main = () => {
           placeholder="Add a To Do"
           style={styles.input}
         />
-        <ScrollView>
-          {Object.keys(toDos).map((key) => (
-            <View style={styles.toDo} key={key}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                {toDos[key].check === true ? (
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <TouchableOpacity onPress={() => checkTodo(key)}>
-                      <MaterialIcons
-                        name="check-circle"
-                        size={30}
-                        color="black"
-                      />
-                    </TouchableOpacity>
-                    <Text style={styles.checkToDoText}>{toDos[key].text}</Text>
-                  </View>
-                ) : (
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <TouchableOpacity onPress={() => checkTodo(key)}>
-                      <MaterialIcons
-                        name="radio-button-unchecked"
-                        size={30}
-                        color="black"
-                      />
-                    </TouchableOpacity>
-                    <Text style={styles.toDoText}>{toDos[key].text}</Text>
-                  </View>
-                )}
-              </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <TouchableOpacity onPress={() => modifyTodo(key)}>
-                  <FontAwesome
-                    name="pencil"
-                    size={20}
-                    style={{ marginRight: 10, color: theme.trash }}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => deleteToDo(key)}>
-                  <Fontisto name="trash" size={20} color={theme.trash} />
-                </TouchableOpacity>
-              </View>
+        {Object.keys(toDos).map((key) => (
+          <View style={styles.toDo} key={key}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              {toDos[key].check === true ? (
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <TouchableOpacity onPress={() => checkTodo(key)}>
+                    <MaterialIcons
+                      name="check-circle"
+                      size={30}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles.checkToDoText}>{toDos[key].text}</Text>
+                </View>
+              ) : (
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <TouchableOpacity onPress={() => checkTodo(key)}>
+                    <MaterialIcons
+                      name="radio-button-unchecked"
+                      size={30}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles.toDoText}>{toDos[key].text}</Text>
+                </View>
+              )}
             </View>
-          ))}
-        </ScrollView>
-      </ScrollView>
-    </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity onPress={() => modifyTodo(key)}>
+                <FontAwesome
+                  name="pencil"
+                  size={20}
+                  style={{ marginRight: 10, color: theme.trash }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => deleteToDo(key)}>
+                <Fontisto name="trash" size={20} color={theme.trash} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 
@@ -208,7 +213,7 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
   },
 
   header: {
@@ -248,9 +253,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 
-  calendar: {
-    marginTop: 80,
-  },
+  // calendar: {
+  //   marginTop: 80,
+  // },
 
   checkToDoText: {
     color: theme.lightGray,
@@ -258,5 +263,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "500",
     marginLeft: 10,
+  },
+
+  profileImg: {
+    alignSelf: "flex-end",
+    marginTop: 60,
+    width: 60,
+    height: 60,
+    borderRadius: 50,
   },
 });
