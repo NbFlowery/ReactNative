@@ -20,7 +20,8 @@ WebBrowser.maybeCompleteAuthSession();
 
 const Login = () => {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: CLIENT_ID,
+    // clientId: CLIENT_ID,
+    expoClientId: CLIENT_ID,
     responseType: "id_token",
   });
   const [login, setLogin] = useState(false);
