@@ -12,6 +12,7 @@ import { View, Text } from "react-native";
 import Constants from "expo-constants";
 import { CLIENT_ID } from "@env";
 import loginStyle from "../../styles/loginStyle";
+import LoginStore from "../../store/LoginStore";
 
 initializeApp(Constants.manifest.web.config.firebase);
 
@@ -23,7 +24,7 @@ const GoogleLogin = () => {
     expoClientId: CLIENT_ID,
     responseType: "id_token",
   });
-  const [login, setLogin] = useState(false);
+  const { login, setLogin } = LoginStore();
 
   const googleLogin = async () => {
     try {

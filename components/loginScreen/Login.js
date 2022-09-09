@@ -4,9 +4,10 @@ import Logo from "./Logo";
 import Main from "../mainScreen/Main";
 import GoogleLogin from "./GoogleLogin";
 import KakaoLogin from "./KakaoLogin";
+import LoginStore from "../../store/LoginStore";
 
 const Login = () => {
-  const [login, setLogin] = useState(false);
+  const { login } = LoginStore();
 
   return (
     <View style={styles.container}>
